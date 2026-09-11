@@ -19,6 +19,13 @@ executors:
     environment:
       HOMEBREW_NO_AUTO_UPDATE: 1
       GOFLAGS: -p=4
+  # self-hosted machine runners are long-lived, not ephemeral like CircleCI's
+  # own machine executors, so working_directory is keyed by pipeline.id to
+  # keep concurrent jobs on the same host from colliding on the same path.
+  self-hosted-amd:
+    machine: true
+    resource_class: runner-ns/clustered-linux-vm
+    working_directory: /home/circleci/workspace-<< pipeline.id >>
 
 commands:
   check-changed-files-or-halt:
@@ -169,7 +176,7 @@ jobs:
   test-integration:
     machine:
       image: ubuntu-2204:current
-    resource_class: large
+    resource_class: large.gen2
     steps:
       - checkout
       - check-changed-files-or-halt
@@ -407,8 +414,7 @@ jobs:
               --exclude "*" \
               --include "symbols-*.jsonl.gz"
   docker-nightly:
-    machine:
-      image: ubuntu-2204:current
+    executor: self-hosted-amd
     steps:
       - run:
           name: login to quay.io
@@ -435,6 +441,7 @@ jobs:
   amd64-package-test-nightly:
     machine:
       image: ubuntu-2204:current
+    resource_class: medium.gen2
     steps:
       - checkout
       - attach_workspace:
@@ -447,7 +454,7 @@ jobs:
   package-sign-windows:
     machine:
       image: ubuntu-2204:current
-    resource_class: medium
+    resource_class: medium.gen2
     steps:
       - checkout
       - check-changed-files-or-halt
