@@ -6,7 +6,7 @@ orbs:
 executors:
   telegraf-ci:
     working_directory: '/go/src/github.com/influxdata/telegraf'
-    resource_class: runner-ns/docker-2xlarge
+    resource_class: runner-ns/docker-large
     docker:
       - image: 'quay.io/influxdb/telegraf-ci:1.27.0'
     environment:
