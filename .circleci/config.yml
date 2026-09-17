@@ -6,11 +6,13 @@ orbs:
 executors:
   telegraf-ci:
     working_directory: '/go/src/github.com/influxdata/telegraf'
-    resource_class: runner-ns/docker-large
+    resource_class: runner-ns/docker-2xlarge
     docker:
       - image: 'quay.io/influxdb/telegraf-ci:1.27.0'
     environment:
       GOFLAGS: -p=4
+      GOPATH: /tmp/cargo/go
+      GOCACHE: /tmp/cargo/go-cache
   mac:
     working_directory: '~/go/src/github.com/influxdata/telegraf'
     resource_class: m4pro.medium
@@ -238,10 +240,6 @@ jobs:
         type: boolean
         default: false
     executor: telegraf-ci
-    resource_class: runner-ns/docker-2xlarge
-    environment:
-      GOPATH: /tmp/cargo/go
-      GOCACHE: /tmp/cargo/go-cache
     steps:
       - package-build:
           type: windows
@@ -292,10 +290,6 @@ jobs:
         type: boolean
         default: false
     executor: telegraf-ci
-    resource_class: runner-ns/docker-2xlarge
-    environment:
-      GOPATH: /tmp/cargo/go
-      GOCACHE: /tmp/cargo/go-cache
     steps:
       - package-build:
           type: riscv64
@@ -316,10 +310,6 @@ jobs:
         type: boolean
         default: false
     executor: telegraf-ci
-    resource_class: runner-ns/docker-2xlarge
-    environment:
-      GOPATH: /tmp/cargo/go
-      GOCACHE: /tmp/cargo/go-cache
     steps:
       - package-build:
           type: s390x
@@ -340,10 +330,6 @@ jobs:
         type: boolean
         default: false
     executor: telegraf-ci
-    resource_class: runner-ns/docker-2xlarge
-    environment:
-      GOPATH: /tmp/cargo/go
-      GOCACHE: /tmp/cargo/go-cache
     steps:
       - package-build:
           type: amd64
@@ -374,10 +360,6 @@ jobs:
         type: boolean
         default: false
     executor: telegraf-ci
-    resource_class: runner-ns/docker-2xlarge
-    environment:
-      GOPATH: /tmp/cargo/go
-      GOCACHE: /tmp/cargo/go-cache
     steps:
       - package-build:
           type: mips
